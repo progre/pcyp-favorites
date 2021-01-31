@@ -1,0 +1,37 @@
+.root {
+  height: 100%;
+}
+
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  padding-top: 80px;
+  padding-bottom: 40px;
+}
+
+.description {
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  padding-bottom: 80px;
+}
+
+.dropzoneAreaContent {
+  flex-grow: 1;
+}
+
+.dropzoneAreaContent > div {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
