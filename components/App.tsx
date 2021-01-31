@@ -1,21 +1,12 @@
-import {
-  Button,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-} from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
 import { Container } from '@material-ui/core';
-import { GetApp } from '@material-ui/icons';
+import { GetApp, Publish } from '@material-ui/icons';
 import { DropzoneArea } from 'material-ui-dropzone';
 import React from 'react';
 import Favorite from './Favorite';
 
 import styles from './App.module.css';
+import Favorites from './Favorites';
 
 export interface Props {
   favorites: readonly Favorite[];
@@ -23,7 +14,7 @@ export interface Props {
   onClickGetByPeCaRecorder(): string;
 }
 
-function Header(props: Props) {
+function Header(props: Props): JSX.Element {
   return (
     <div className={styles.header}>
       <div className={styles.description}>
@@ -67,6 +58,7 @@ export default function App(props: Props): JSX.Element {
           hidden={props.favorites.length > 0}
         >
           <DropzoneArea
+            Icon={Publish as any}
             filesLimit={1}
             showPreviewsInDropzone={false}
             showAlerts={['error', 'info']}
@@ -79,26 +71,7 @@ export default function App(props: Props): JSX.Element {
           />
         </div>
         <div className={styles.content} hidden={props.favorites.length === 0}>
-          <TableContainer component={Paper}>
-            <Table size="small" aria-label="a dense table">
-              <TableHead>
-                <TableRow>
-                  <TableCell align="right">フィルタ名</TableCell>
-                  <TableCell>検索文字列</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {props.favorites.map((row) => (
-                  <TableRow key={row.name}>
-                    <TableCell component="th" scope="row" align="right">
-                      {row.name}
-                    </TableCell>
-                    <TableCell>{row.regExp}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <Favorites favorites={props.favorites} />
         </div>
       </div>
     </Container>
