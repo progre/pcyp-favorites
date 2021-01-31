@@ -1,4 +1,4 @@
-import { js2xml, json2xml, xml2js, xml2json } from 'xml-js';
+import { js2xml } from 'xml-js';
 import Favorite from './Favorite';
 
 export default function toPeCaRecorderXml(
@@ -172,5 +172,5 @@ export default function toPeCaRecorderXml(
       })),
     },
   };
-  return js2xml(xmlData, { compact: true });
+  return js2xml(xmlData, { spaces: '\t', compact: true }) + '\n';
 }
