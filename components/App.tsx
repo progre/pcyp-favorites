@@ -19,7 +19,7 @@ function Header(props: Props): JSX.Element {
     <div className={styles.header}>
       <div className={styles.description}>
         <Typography>
-          pcypLite のお気に入りを PeCaRecorder のフィルタ設定に変換します。
+          pcypLite のお気に入り設定を PeCaRecorder のフィルタ設定に変換します。
         </Typography>
         <ol>
           <li>
@@ -33,6 +33,7 @@ function Header(props: Props): JSX.Element {
         <Button
           disabled={props.favorites.length === 0}
           variant="contained"
+          size="large"
           color="primary"
           startIcon={<GetApp />}
           href="#"
