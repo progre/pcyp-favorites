@@ -26,7 +26,7 @@ export default function AppContainer(): JSX.Element {
       }}
       onClickGetByPeCaRecorder={() => {
         const blob = new Blob([toPeCaRecorderXml(state.favorites)], {
-          type: 'text/plain',
+          type: 'application/xml',
         });
         blob.text().then(console.log);
         return URL.createObjectURL(blob);
