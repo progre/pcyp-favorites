@@ -1,6 +1,10 @@
 import { js2xml } from 'xml-js';
 import Favorite from './Favorite';
 
+function boolStr(bool: boolean) {
+  return bool ? 'true' : 'false';
+}
+
 export default function toPeCaRecorderXml(
   favorites: readonly Favorite[]
 ): string {
@@ -10,36 +14,36 @@ export default function toPeCaRecorderXml(
       _attributes: { version: '100' },
       item: favorites.map((x) => ({
         _attributes: {
-          enable: 'true',
+          enable: boolStr(x.enable),
           name: x.name,
           favorite: 'true',
           download: 'false',
-          ignore: 'false',
+          ignore: boolStr(x.type === 'ignore'),
         },
         base: {
           search: { _text: x.regExp },
           source: {},
           normal: {
             _attributes: {
-              channelName: 'true',
-              genre: 'true',
-              detail: 'true',
-              comment: 'true',
-              artist: 'true',
-              title: 'true',
-              album: 'true',
+              channelName: boolStr(x.searchTarget.channelName),
+              genre: boolStr(x.searchTarget.genre),
+              detail: boolStr(x.searchTarget.description),
+              comment: boolStr(x.searchTarget.comment),
+              artist: 'false',
+              title: boolStr(x.searchTarget.trackTitle),
+              album: 'false',
             },
           },
           extra: {
             _attributes: {
-              ypName: 'false',
+              ypName: boolStr(x.searchTarget.ypName),
               ypUrl: 'false',
-              contactUrl: 'false',
+              contactUrl: boolStr(x.searchTarget.contactUrl),
               trackContactUrl: 'false',
-              type: 'false',
+              type: boolStr(x.searchTarget.type),
               status: 'false',
-              id: 'false',
-              tip: 'false',
+              id: boolStr(x.searchTarget.streamUrl),
+              tip: boolStr(x.searchTarget.streamUrl),
             },
           },
         },
@@ -99,7 +103,12 @@ export default function toPeCaRecorderXml(
             },
           },
         },
-        option: { _attributes: { icase: 'true', width: 'true' } },
+        option: {
+          _attributes: {
+            icase: boolStr(x.ignoreCase),
+            width: boolStr(x.ignoreFullwidthAndHalfwidth),
+          },
+        },
         bitrate: {
           _attributes: {
             enableMin: 'false',
@@ -154,8 +163,8 @@ export default function toPeCaRecorderXml(
         },
         favorite: {
           _attributes: {
-            tab: 'true',
-            all: 'true',
+            tab: boolStr(x.type === 'favorite'),
+            all: boolStr(x.type === 'favorite'),
             exclusive: 'true',
             player: 'false',
           },
@@ -164,7 +173,7 @@ export default function toPeCaRecorderXml(
         ignore: { _attributes: { show: 'true' } },
         notify: {
           _attributes: {
-            notify: 'true',
+            notify: boolStr(x.notification),
             enableAlarm: 'false',
             alarm: '',
           },

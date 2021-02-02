@@ -1,24 +1,10 @@
-import ini from 'ini';
+import { Button } from '@material-ui/core';
 import React, { useState } from 'react';
+import { WithSnackbarProps, SnackbarProvider, withSnackbar } from 'notistack';
 import App from './App';
 import Favorite from './Favorite';
+import fromPcypLiteIni from './fromPcypLiteIni';
 import toPeCaRecorderXml from './toPeCaRecorderXml';
-import { WithSnackbarProps, SnackbarProvider, withSnackbar } from 'notistack';
-import { Button } from '@material-ui/core';
-
-function fromPcypLiteIni(text: string): Favorite[] | null {
-  const favorites = ini.parse(text);
-  const keys = Object.keys(favorites);
-  if (keys[0] !== 'Fav_0') {
-    return null;
-  }
-  return keys
-    .map((x) => favorites[x])
-    .map((x) => {
-      const favorite: Favorite = { name: x.Title, regExp: x.Word };
-      return favorite;
-    });
-}
 
 function AppContainerWrapped(props: WithSnackbarProps): JSX.Element {
   const [state, setState] = useState({ favorites: [] as readonly Favorite[] });
