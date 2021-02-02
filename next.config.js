@@ -1,3 +1,3 @@
 module.exports = {
-  basePath: '/pcyp-favs',
+  basePath: process.env.VERCEL ? '/pcyp-favs' : '',
 };

@@ -34,6 +34,14 @@ function warnsForPeCaRecorder(fav: Favorite): readonly string[] {
       'PeCaRecorder では "ビットレート" を検索対象にできません。',
     ],
     [!fav.useRegex, 'PeCaRecorder では常に正規表現が有効になります。'],
+    [
+      fav.textColor != null && fav.textColor < 0,
+      'PeCaRecorder では文字色に GUI に紐づいた色を使用できません。',
+    ],
+    [
+      fav.backgroundColor != null && fav.backgroundColor < 0,
+      'PeCaRecorder では背景色に GUI に紐づいた色を使用できません。',
+    ],
   ] as readonly [boolean, string][])
     .filter(([check, _]) => check)
     .map(([_, msg]) => msg);

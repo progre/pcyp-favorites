@@ -155,10 +155,12 @@ export default function toPeCaRecorderXml(
         common: {
           _attributes: {
             sort: 'true',
-            enableText: 'false',
-            text: '0',
-            enableBg: 'false',
-            bg: '16777215',
+            enableText: boolStr(x.textColor != null && x.textColor >= 0),
+            text: x.textColor != null ? x.textColor.toString() : '0',
+            enableBg: boolStr(
+              x.backgroundColor != null && x.backgroundColor >= 0
+            ),
+            bg: x.backgroundColor != null ? x.backgroundColor : '16777215',
           },
         },
         favorite: {
