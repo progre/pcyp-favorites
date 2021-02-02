@@ -9,6 +9,7 @@ export default function toPeCaRecorderXml(
     root: {
       _attributes: { version: 100 },
       item: favorites.map((x) => {
+        const searchTargetOnlyBitrateAndOrListeners = x.searchTargetOnlyBitrateAndOrListeners();
         const enableBitrate =
           x.searchTarget.bitrate && x.regExpToNumber() != null;
         const enableListeners =
@@ -22,11 +23,15 @@ export default function toPeCaRecorderXml(
             ignore: x.type === 'ignore',
           },
           base: {
-            search: { _text: x.regExp },
+            search: {
+              _text: searchTargetOnlyBitrateAndOrListeners ? '.*' : x.regExp,
+            },
             source: {},
             normal: {
               _attributes: {
-                channelName: x.searchTarget.channelName,
+                channelName: searchTargetOnlyBitrateAndOrListeners
+                  ? true
+                  : x.searchTarget.channelName,
                 genre: x.searchTarget.genre,
                 detail: x.searchTarget.description,
                 comment: x.searchTarget.comment,

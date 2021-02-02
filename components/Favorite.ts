@@ -34,4 +34,11 @@ export default class Favorite {
     }
     return Number(m[1]);
   }
+
+  searchTargetOnlyBitrateAndOrListeners() {
+    return Object.keys(this.searchTarget)
+      .filter((x) => !['listeners', 'bitrate'].includes(x))
+      .map((x) => (this.searchTarget as { [key: string]: boolean })[x])
+      .every((x) => !x);
+  }
 }
