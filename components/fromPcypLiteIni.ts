@@ -26,10 +26,10 @@ function toFavorite(
   const backgroundColor = (flags & (1 << 15)) !== 0 ? color : null;
   const textColor = (flags & (1 << 16)) !== 0 ? colorText : null;
   // 大小文字は区別しない 固定
-  return {
-    name: title,
-    regExp: word,
-    searchTarget: {
+  return new Favorite(
+    title,
+    word,
+    {
       channelName,
       genre: genreDescPlaying,
       description: genreDescPlaying,
@@ -43,14 +43,14 @@ function toFavorite(
       bitrate,
     },
     enable,
-    type: ignore ? 'ignore' : showInFavoriteList ? 'favorite' : 'tag',
-    notification: !disableNotification,
+    ignore ? 'ignore' : showInFavoriteList ? 'favorite' : 'tag',
+    !disableNotification,
     useRegex,
     ignoreFullwidthAndHalfwidth,
-    ignoreCase: true,
+    true,
     textColor,
-    backgroundColor,
-  };
+    backgroundColor
+  );
 }
 
 export default function fromPcypLiteIni(text: string): Favorite[] | null {

@@ -12,175 +12,181 @@ export default function toPeCaRecorderXml(
     _declaration: { _attributes: { version: '1.0', encoding: 'utf-8' } },
     root: {
       _attributes: { version: '100' },
-      item: favorites.map((x) => ({
-        _attributes: {
-          enable: boolStr(x.enable),
-          name: x.name,
-          favorite: 'true',
-          download: 'false',
-          ignore: boolStr(x.type === 'ignore'),
-        },
-        base: {
-          search: { _text: x.regExp },
-          source: {},
-          normal: {
-            _attributes: {
-              channelName: boolStr(x.searchTarget.channelName),
-              genre: boolStr(x.searchTarget.genre),
-              detail: boolStr(x.searchTarget.description),
-              comment: boolStr(x.searchTarget.comment),
-              artist: 'false',
-              title: boolStr(x.searchTarget.trackTitle),
-              album: 'false',
+      item: favorites.map((x) => {
+        const enableBitrate =
+          x.searchTarget.bitrate && x.regExpToNumberString() != null;
+        const enableListeners =
+          x.searchTarget.listeners && x.regExpToNumberString() != null;
+        return {
+          _attributes: {
+            enable: boolStr(x.enable),
+            name: x.name,
+            favorite: 'true',
+            download: 'false',
+            ignore: boolStr(x.type === 'ignore'),
+          },
+          base: {
+            search: { _text: x.regExp },
+            source: {},
+            normal: {
+              _attributes: {
+                channelName: boolStr(x.searchTarget.channelName),
+                genre: boolStr(x.searchTarget.genre),
+                detail: boolStr(x.searchTarget.description),
+                comment: boolStr(x.searchTarget.comment),
+                artist: 'false',
+                title: boolStr(x.searchTarget.trackTitle),
+                album: 'false',
+              },
+            },
+            extra: {
+              _attributes: {
+                ypName: boolStr(x.searchTarget.ypName),
+                ypUrl: 'false',
+                contactUrl: boolStr(x.searchTarget.contactUrl),
+                trackContactUrl: 'false',
+                type: boolStr(x.searchTarget.type),
+                status: 'false',
+                id: boolStr(x.searchTarget.streamUrl),
+                tip: boolStr(x.searchTarget.streamUrl),
+              },
             },
           },
-          extra: {
-            _attributes: {
-              ypName: boolStr(x.searchTarget.ypName),
-              ypUrl: 'false',
-              contactUrl: boolStr(x.searchTarget.contactUrl),
-              trackContactUrl: 'false',
-              type: boolStr(x.searchTarget.type),
-              status: 'false',
-              id: boolStr(x.searchTarget.streamUrl),
-              tip: boolStr(x.searchTarget.streamUrl),
+          and: {
+            _attributes: { enable: 'false' },
+            search: {},
+            source: {},
+            normal: {
+              _attributes: {
+                channelName: 'true',
+                genre: 'false',
+                detail: 'false',
+                comment: 'false',
+                artist: 'false',
+                title: 'false',
+                album: 'false',
+              },
+            },
+            extra: {
+              _attributes: {
+                ypName: 'false',
+                ypUrl: 'false',
+                contactUrl: 'false',
+                trackContactUrl: 'false',
+                type: 'false',
+                status: 'false',
+                id: 'false',
+                tip: 'false',
+              },
             },
           },
-        },
-        and: {
-          _attributes: { enable: 'false' },
-          search: {},
-          source: {},
-          normal: {
-            _attributes: {
-              channelName: 'true',
-              genre: 'false',
-              detail: 'false',
-              comment: 'false',
-              artist: 'false',
-              title: 'false',
-              album: 'false',
+          not: {
+            _attributes: { enable: 'false' },
+            search: {},
+            source: {},
+            normal: {
+              _attributes: {
+                channelName: 'true',
+                genre: 'false',
+                detail: 'false',
+                comment: 'false',
+                artist: 'false',
+                title: 'false',
+                album: 'false',
+              },
+            },
+            extra: {
+              _attributes: {
+                ypName: 'false',
+                ypUrl: 'false',
+                contactUrl: 'false',
+                trackContactUrl: 'false',
+                type: 'false',
+                status: 'false',
+                id: 'false',
+                tip: 'false',
+              },
             },
           },
-          extra: {
+          option: {
             _attributes: {
-              ypName: 'false',
-              ypUrl: 'false',
-              contactUrl: 'false',
-              trackContactUrl: 'false',
-              type: 'false',
-              status: 'false',
-              id: 'false',
-              tip: 'false',
+              icase: boolStr(x.ignoreCase),
+              width: boolStr(x.ignoreFullwidthAndHalfwidth),
             },
           },
-        },
-        not: {
-          _attributes: { enable: 'false' },
-          search: {},
-          source: {},
-          normal: {
+          bitrate: {
             _attributes: {
-              channelName: 'true',
-              genre: 'false',
-              detail: 'false',
-              comment: 'false',
-              artist: 'false',
-              title: 'false',
-              album: 'false',
+              enableMin: boolStr(enableBitrate),
+              min: enableBitrate ? x.regExpToNumberString() : '0',
+              enableMax: boolStr(enableBitrate),
+              max: enableBitrate ? x.regExpToNumberString() : '0',
             },
           },
-          extra: {
+          listener: {
             _attributes: {
-              ypName: 'false',
-              ypUrl: 'false',
-              contactUrl: 'false',
-              trackContactUrl: 'false',
-              type: 'false',
-              status: 'false',
-              id: 'false',
-              tip: 'false',
+              enableMin: boolStr(enableListeners),
+              min: enableListeners ? x.regExpToNumberString() : '0',
+              enableMax: boolStr(enableListeners),
+              max: enableListeners ? x.regExpToNumberString() : '0',
             },
           },
-        },
-        option: {
-          _attributes: {
-            icase: boolStr(x.ignoreCase),
-            width: boolStr(x.ignoreFullwidthAndHalfwidth),
+          relay: {
+            _attributes: {
+              enableMin: 'false',
+              min: '0',
+              enableMax: 'false',
+              max: '0',
+            },
           },
-        },
-        bitrate: {
-          _attributes: {
-            enableMin: 'false',
-            min: '0',
-            enableMax: 'false',
-            max: '0',
+          time: {
+            _attributes: {
+              enableMin: 'false',
+              min: '0',
+              enableMax: 'false',
+              max: '0',
+            },
           },
-        },
-        listener: {
-          _attributes: {
-            enableMin: 'false',
-            min: '0',
-            enableMax: 'false',
-            max: '0',
+          new: { _attributes: { new: 'false', notNew: 'false' } },
+          play: {
+            _attributes: {
+              play: 'false',
+              notPlay: 'false',
+              listener: 'false',
+              notListener: 'false',
+              relay: 'false',
+              notRelay: 'false',
+            },
           },
-        },
-        relay: {
-          _attributes: {
-            enableMin: 'false',
-            min: '0',
-            enableMax: 'false',
-            max: '0',
+          common: {
+            _attributes: {
+              sort: 'true',
+              enableText: boolStr(x.textColor != null && x.textColor >= 0),
+              text: x.textColor != null ? x.textColor.toString() : '0',
+              enableBg: boolStr(
+                x.backgroundColor != null && x.backgroundColor >= 0
+              ),
+              bg: x.backgroundColor != null ? x.backgroundColor : '16777215',
+            },
           },
-        },
-        time: {
-          _attributes: {
-            enableMin: 'false',
-            min: '0',
-            enableMax: 'false',
-            max: '0',
+          favorite: {
+            _attributes: {
+              tab: boolStr(x.type === 'favorite'),
+              all: boolStr(x.type === 'favorite'),
+              exclusive: 'true',
+              player: 'false',
+            },
           },
-        },
-        new: { _attributes: { new: 'false', notNew: 'false' } },
-        play: {
-          _attributes: {
-            play: 'false',
-            notPlay: 'false',
-            listener: 'false',
-            notListener: 'false',
-            relay: 'false',
-            notRelay: 'false',
+          download: { _attributes: { execute: 'true', observe: 'true' } },
+          ignore: { _attributes: { show: 'true' } },
+          notify: {
+            _attributes: {
+              notify: boolStr(x.notification),
+              enableAlarm: 'false',
+              alarm: '',
+            },
           },
-        },
-        common: {
-          _attributes: {
-            sort: 'true',
-            enableText: boolStr(x.textColor != null && x.textColor >= 0),
-            text: x.textColor != null ? x.textColor.toString() : '0',
-            enableBg: boolStr(
-              x.backgroundColor != null && x.backgroundColor >= 0
-            ),
-            bg: x.backgroundColor != null ? x.backgroundColor : '16777215',
-          },
-        },
-        favorite: {
-          _attributes: {
-            tab: boolStr(x.type === 'favorite'),
-            all: boolStr(x.type === 'favorite'),
-            exclusive: 'true',
-            player: 'false',
-          },
-        },
-        download: { _attributes: { execute: 'true', observe: 'true' } },
-        ignore: { _attributes: { show: 'true' } },
-        notify: {
-          _attributes: {
-            notify: boolStr(x.notification),
-            enableAlarm: 'false',
-            alarm: '',
-          },
-        },
-      })),
+        };
+      }),
     },
   };
   return js2xml(xmlData, { spaces: '\t', compact: true }) + '\n';
