@@ -26,11 +26,11 @@ function warnsForPeCaRecorder(fav: Favorite): readonly string[] {
       'PeCaRecorder では "ストリームURL" を検索対象にできません。代わりに "ID" "TIP" を検索対象にします。',
     ],
     [
-      fav.searchTarget.listeners && fav.regExpToNumberString() == null,
+      fav.searchTarget.listeners && fav.regExpToNumber() == null,
       'PeCaRecorder では "リスナー" を検索対象にできません。',
     ],
     [
-      fav.searchTarget.bitrate && fav.regExpToNumberString() == null,
+      fav.searchTarget.bitrate && fav.regExpToNumber() == null,
       'PeCaRecorder では "ビットレート" を検索対象にできません。',
     ],
     [!fav.useRegex, 'PeCaRecorder では常に正規表現が有効になります。'],

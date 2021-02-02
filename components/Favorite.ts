@@ -27,11 +27,11 @@ export default class Favorite {
     readonly backgroundColor: number | null // pcypLite 0未満はGUIカラー
   ) {}
 
-  regExpToNumberString(): String | null {
+  regExpToNumber(): number | null {
     const m = /^\^?(\d+)\$?$/.exec(this.regExp);
     if (m == null) {
       return null;
     }
-    return m[1];
+    return Number(m[1]);
   }
 }
