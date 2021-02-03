@@ -1,5 +1,5 @@
 import { js2xml } from 'xml-js';
-import Favorite from './Favorite';
+import Favorite from '../Favorite';
 
 export default function toPeCaRecorderXml(
   favorites: readonly Favorite[]

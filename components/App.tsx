@@ -3,18 +3,20 @@ import { Container } from '@material-ui/core';
 import { GetApp, Publish } from '@material-ui/icons';
 import { DropzoneArea } from 'material-ui-dropzone';
 import React from 'react';
-import Favorite from './Favorite';
-
 import styles from './App.module.css';
+import Favorite from './Favorite';
 import Favorites from './Favorites';
+import IPcypFavorites from './IPcypFavorites';
+import PeCaRecorder from './pecarecorder/PeCaRecorder';
 
 export interface Props {
   favorites: readonly Favorite[];
   onDropFile(file: File): void;
-  onClickGetByPeCaRecorder(): string;
+  onClickGet(pcypFavs: IPcypFavorites): string;
 }
 
 function Header(props: Props): JSX.Element {
+  const peCaRecorder = new PeCaRecorder();
   return (
     <div className={styles.header}>
       <div className={styles.description}>
@@ -37,9 +39,11 @@ function Header(props: Props): JSX.Element {
           color="primary"
           startIcon={<GetApp />}
           href="#"
-          download="Filter.xml"
+          download={peCaRecorder.fileName}
           onClick={(ev) => {
-            (ev.currentTarget as HTMLAnchorElement).href = props.onClickGetByPeCaRecorder();
+            (ev.currentTarget as HTMLAnchorElement).href = props.onClickGet(
+              peCaRecorder
+            );
           }}
         >
           変換

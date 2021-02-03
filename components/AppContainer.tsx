@@ -4,7 +4,7 @@ import { WithSnackbarProps, SnackbarProvider, withSnackbar } from 'notistack';
 import App from './App';
 import Favorite from './Favorite';
 import fromPcypLiteIni from './fromPcypLiteIni';
-import toPeCaRecorderXml from './toPeCaRecorderXml';
+import PeCaRecorder from './pecarecorder/PeCaRecorder';
 
 function AppContainerWrapped(props: WithSnackbarProps): JSX.Element {
   const [state, setState] = useState({ favorites: [] as readonly Favorite[] });
@@ -26,11 +26,14 @@ function AppContainerWrapped(props: WithSnackbarProps): JSX.Element {
         }
         setState((old) => ({ ...old, favorites }));
       }}
-      onClickGetByPeCaRecorder={() => {
-        const blob = new Blob([toPeCaRecorderXml(state.favorites)], {
-          type: 'application/xml',
+      onClickGet={(pcypFavs) => {
+        const blob = new Blob([pcypFavs.toFile(state.favorites)], {
+          type: pcypFavs.fileName.endsWith('.xml')
+            ? 'application/xml'
+            : (() => {
+                throw new Error();
+              })(),
         });
-        blob.text().then(console.log);
         return URL.createObjectURL(blob);
       }}
     />

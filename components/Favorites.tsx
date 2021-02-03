@@ -14,45 +14,16 @@ import {
 import { Info, Warning } from '@material-ui/icons';
 import React from 'react';
 import Favorite from './Favorite';
+import PeCaRecorder from './pecarecorder/PeCaRecorder';
 
 interface Props {
   favorites: readonly Favorite[];
 }
 
-function warnsForPeCaRecorder(fav: Favorite): readonly string[] {
-  return ([
-    [
-      fav.searchTarget.streamUrl,
-      'PeCaRecorder では "ストリームURL" を検索対象にできません。代わりに "ID" "TIP" を検索対象にします。',
-    ],
-    [
-      fav.searchTarget.listeners && fav.regExpToNumber() == null,
-      'PeCaRecorder では "リスナー" を検索対象にできません。',
-    ],
-    [
-      fav.searchTarget.bitrate && fav.regExpToNumber() == null,
-      'PeCaRecorder では "ビットレート" を検索対象にできません。',
-    ],
-    [!fav.useRegex, 'PeCaRecorder では常に正規表現が有効になります。'],
-    [
-      fav.textColor != null && fav.textColor < 0,
-      'PeCaRecorder では文字色に GUI に紐づいた色を使用できません。',
-    ],
-    [
-      fav.backgroundColor != null && fav.backgroundColor < 0,
-      'PeCaRecorder では背景色に GUI に紐づいた色を使用できません。',
-    ],
-  ] as readonly [boolean, string][])
-    .filter(([check, _]) => check)
-    .map(([_, msg]) => msg);
-}
-
-function Remarks(props: {
-  warnsForPeCaRecorder: readonly string[];
-}): JSX.Element {
+function Remarks(props: { warns: readonly string[] }): JSX.Element {
   return (
     <List dense={true}>
-      {props.warnsForPeCaRecorder.map((x, i) => (
+      {props.warns.map((x, i) => (
         <ListItem key={i}>
           <ListItemIcon>
             <Warning color="secondary" />
@@ -65,9 +36,10 @@ function Remarks(props: {
 }
 
 export default function Favorites(props: Props): JSX.Element {
+  const pcypFavs = new PeCaRecorder();
   const favs = props.favorites.map((fav) => ({
     fav,
-    warnsForPeCaRecorder: warnsForPeCaRecorder(fav),
+    warnsForPeCaRecorder: pcypFavs.warnsPerFavorite(fav),
   }));
   const numErrors = favs
     .map((x) => x.warnsForPeCaRecorder)
@@ -94,18 +66,14 @@ export default function Favorites(props: Props): JSX.Element {
             <TableCell></TableCell>
             <TableCell>
               <List dense={true}>
-                <ListItem>
-                  <ListItemIcon>
-                    <Info color="primary" />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={
-                      favs.filter((x) => x.fav.type === 'favorite').length <= 10
-                        ? 'お気に入りの数が10件以下なので、それぞれの "お気に入りリストにタブを表示" は ON になります。'
-                        : 'お気に入りの数が10件を超しているので、それぞれの "お気に入りリストにタブを表示" は OFF になります。'
-                    }
-                  />
-                </ListItem>
+                {pcypFavs.globalInfos(props.favorites).map((x, i) => (
+                  <ListItem key={i}>
+                    <ListItemIcon>
+                      <Info color="primary" />
+                    </ListItemIcon>
+                    <ListItemText primary={x} />
+                  </ListItem>
+                ))}
               </List>
             </TableCell>
           </TableRow>
@@ -120,7 +88,7 @@ export default function Favorites(props: Props): JSX.Element {
                 <small>{row.fav.regExp}</small>
               </TableCell>
               <TableCell>
-                <Remarks warnsForPeCaRecorder={row.warnsForPeCaRecorder} />
+                <Remarks warns={row.warnsForPeCaRecorder} />
               </TableCell>
             </TableRow>
           ))}
