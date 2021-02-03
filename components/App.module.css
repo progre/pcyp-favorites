@@ -10,8 +10,8 @@
 
 .header {
   display: flex;
+  flex-direction: column;
   justify-content: space-around;
-  align-items: flex-end;
   padding-top: 80px;
   padding-bottom: 40px;
 }
@@ -19,6 +19,18 @@
 .description {
   display: flex;
   flex-direction: column;
+}
+
+.buttons {
+  text-align: end;
+}
+
+.buttons > a:first-child {
+  margin-right: 1em;
+}
+
+.buttons > a > span {
+  text-transform: initial;
 }
 
 .content {

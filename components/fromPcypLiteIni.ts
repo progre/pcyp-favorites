@@ -31,9 +31,7 @@ function toFavorite(
     word,
     {
       channelName,
-      genre: genreDescPlaying,
-      description: genreDescPlaying,
-      trackTitle: genreDescPlaying,
+      genreDescPlaying: genreDescPlaying,
       comment,
       contactUrl,
       ypName,

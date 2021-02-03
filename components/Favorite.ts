@@ -4,9 +4,10 @@ export default class Favorite {
     readonly regExp: string,
     readonly searchTarget: Readonly<{
       channelName: boolean;
-      genre: boolean; // pcypLite は genre/desc/playing をまとめる
-      description: boolean;
-      trackTitle: boolean;
+      genreDescPlaying: boolean; // pcypLite
+      // genre: boolean;
+      // description: boolean;
+      // trackTitle: boolean;
       comment: boolean;
       contactUrl: boolean;
       ypName: boolean;

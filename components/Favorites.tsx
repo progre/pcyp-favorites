@@ -13,6 +13,7 @@ import {
 } from '@material-ui/core';
 import { Info, Warning } from '@material-ui/icons';
 import React from 'react';
+import Epcyp from './epcyp/Epcyp';
 import Favorite from './Favorite';
 import PeCaRecorder from './pecarecorder/PeCaRecorder';
 
@@ -35,16 +36,29 @@ function Remarks(props: { warns: readonly string[] }): JSX.Element {
   );
 }
 
+export const hiddenEpcyp = true;
+
 export default function Favorites(props: Props): JSX.Element {
-  const pcypFavs = new PeCaRecorder();
+  const epcyp = new Epcyp();
+  const peCaRecorder = new PeCaRecorder();
   const favs = props.favorites.map((fav) => ({
     fav,
-    warnsForPeCaRecorder: pcypFavs.warnsPerFavorite(fav),
+    warnsForEpcyp: epcyp.warnsPerFavorite(fav),
+    warnsForPeCaRecorder: peCaRecorder.warnsPerFavorite(fav),
   }));
-  const numErrors = favs
-    .map((x) => x.warnsForPeCaRecorder)
-    .filter((x) => x.length > 0)
-    .flat().length;
+  const epcypGlobalWarns = epcyp.globalWarns(props.favorites);
+  const peCaRecorderGlobalWarns = peCaRecorder.globalWarns(props.favorites);
+
+  const numErrorsEpcyp =
+    favs
+      .map((x) => x.warnsForEpcyp)
+      .filter((x) => x.length > 0)
+      .flat().length + epcypGlobalWarns.length;
+  const numErrorsPeCaRecorder =
+    favs
+      .map((x) => x.warnsForPeCaRecorder)
+      .filter((x) => x.length > 0)
+      .flat().length + peCaRecorderGlobalWarns.length;
   return (
     <TableContainer component={Paper}>
       <Table size="small" aria-label="a dense table">
@@ -56,20 +70,64 @@ export default function Favorites(props: Props): JSX.Element {
             <TableCell>
               <b>検索文字列</b>
             </TableCell>
+            {hiddenEpcyp ? null : (
+              <TableCell align="center">
+                <b>EPCYP</b>
+                {numErrorsEpcyp > 0 ? (
+                  <small> (警告 {numErrorsEpcyp} 件)</small>
+                ) : (
+                  ''
+                )}
+              </TableCell>
+            )}
             <TableCell align="center">
-              <b>備考</b>
-              {numErrors > 0 ? <small> (警告 {numErrors} 件)</small> : ''}
+              <b>PeCaRecorder</b>
+              {numErrorsPeCaRecorder > 0 ? (
+                <small> (警告 {numErrorsPeCaRecorder} 件)</small>
+              ) : (
+                ''
+              )}
             </TableCell>
           </TableRow>
           <TableRow>
             <TableCell></TableCell>
             <TableCell></TableCell>
+            {hiddenEpcyp ? null : (
+              <TableCell>
+                <List dense={true}>
+                  {epcyp.globalInfos(props.favorites).map((x, i) => (
+                    <ListItem key={i}>
+                      <ListItemIcon>
+                        <Info color="primary" />
+                      </ListItemIcon>
+                      <ListItemText primary={x} />
+                    </ListItem>
+                  ))}
+                  {epcypGlobalWarns.map((x, i) => (
+                    <ListItem key={i}>
+                      <ListItemIcon>
+                        <Warning color="secondary" />
+                      </ListItemIcon>
+                      <ListItemText primary={x} />
+                    </ListItem>
+                  ))}
+                </List>
+              </TableCell>
+            )}
             <TableCell>
               <List dense={true}>
-                {pcypFavs.globalInfos(props.favorites).map((x, i) => (
+                {peCaRecorder.globalInfos(props.favorites).map((x, i) => (
                   <ListItem key={i}>
                     <ListItemIcon>
                       <Info color="primary" />
+                    </ListItemIcon>
+                    <ListItemText primary={x} />
+                  </ListItem>
+                ))}
+                {peCaRecorderGlobalWarns.map((x, i) => (
+                  <ListItem key={i}>
+                    <ListItemIcon>
+                      <Warning color="secondary" />
                     </ListItemIcon>
                     <ListItemText primary={x} />
                   </ListItem>
@@ -87,6 +145,11 @@ export default function Favorites(props: Props): JSX.Element {
               <TableCell>
                 <small>{row.fav.regExp}</small>
               </TableCell>
+              {hiddenEpcyp ? null : (
+                <TableCell>
+                  <Remarks warns={row.warnsForEpcyp} />
+                </TableCell>
+              )}
               <TableCell>
                 <Remarks warns={row.warnsForPeCaRecorder} />
               </TableCell>

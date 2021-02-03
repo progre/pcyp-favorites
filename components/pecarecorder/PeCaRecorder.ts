@@ -13,6 +13,10 @@ export default class PeCaRecorder implements IPcypFavorites {
     ];
   }
 
+  globalWarns(favs: readonly Favorite[]): readonly string[] {
+    return [];
+  }
+
   warnsPerFavorite(fav: Favorite): readonly string[] {
     return ([
       [

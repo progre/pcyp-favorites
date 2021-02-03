@@ -4,8 +4,9 @@ import { GetApp, Publish } from '@material-ui/icons';
 import { DropzoneArea } from 'material-ui-dropzone';
 import React from 'react';
 import styles from './App.module.css';
+import Epcyp from './epcyp/Epcyp';
 import Favorite from './Favorite';
-import Favorites from './Favorites';
+import Favorites, { hiddenEpcyp } from './Favorites';
 import IPcypFavorites from './IPcypFavorites';
 import PeCaRecorder from './pecarecorder/PeCaRecorder';
 
@@ -16,6 +17,7 @@ export interface Props {
 }
 
 function Header(props: Props): JSX.Element {
+  const epcyp = new Epcyp();
   const peCaRecorder = new PeCaRecorder();
   return (
     <div className={styles.header}>
@@ -31,7 +33,25 @@ function Header(props: Props): JSX.Element {
           <li>変換ボタンをクリックする</li>
         </ol>
       </div>
-      <div>
+      <div className={styles.buttons}>
+        {hiddenEpcyp ? null : (
+          <Button
+            disabled={props.favorites.length === 0}
+            variant="contained"
+            size="large"
+            color="primary"
+            startIcon={<GetApp />}
+            href="#"
+            download={epcyp.fileName}
+            onClick={(ev) => {
+              (ev.currentTarget as HTMLAnchorElement).href = props.onClickGet(
+                epcyp
+              );
+            }}
+          >
+            EPCYP 形式へ変換
+          </Button>
+        )}
         <Button
           disabled={props.favorites.length === 0}
           variant="contained"
@@ -46,7 +66,7 @@ function Header(props: Props): JSX.Element {
             );
           }}
         >
-          変換
+          PeCaRecorder 形式へ変換
         </Button>
       </div>
     </div>

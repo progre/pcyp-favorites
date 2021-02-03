@@ -28,11 +28,7 @@ function AppContainerWrapped(props: WithSnackbarProps): JSX.Element {
       }}
       onClickGet={(pcypFavs) => {
         const blob = new Blob([pcypFavs.toFile(state.favorites)], {
-          type: pcypFavs.fileName.endsWith('.xml')
-            ? 'application/xml'
-            : (() => {
-                throw new Error();
-              })(),
+          type: `application/${pcypFavs.fileName.match(/\.(.+?)$/)![1]}`,
         });
         return URL.createObjectURL(blob);
       }}

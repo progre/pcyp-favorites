@@ -34,11 +34,11 @@ export default function toPeCaRecorderXml(
                 channelName: searchTargetOnlyBitrateAndOrListeners
                   ? true
                   : x.searchTarget.channelName,
-                genre: x.searchTarget.genre,
-                detail: x.searchTarget.description,
+                genre: x.searchTarget.genreDescPlaying,
+                detail: x.searchTarget.genreDescPlaying,
                 comment: x.searchTarget.comment,
                 artist: false,
-                title: x.searchTarget.trackTitle,
+                title: x.searchTarget.genreDescPlaying,
                 album: false,
               },
             },
