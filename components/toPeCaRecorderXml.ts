@@ -4,6 +4,8 @@ import Favorite from './Favorite';
 export default function toPeCaRecorderXml(
   favorites: readonly Favorite[]
 ): string {
+  const useFavoritesTab =
+    favorites.filter((x) => x.type === 'favorite').length <= 10;
   const xmlData = {
     _declaration: { _attributes: { version: '1.0', encoding: 'utf-8' } },
     root: {
@@ -169,7 +171,7 @@ export default function toPeCaRecorderXml(
           },
           favorite: {
             _attributes: {
-              tab: x.type === 'favorite',
+              tab: useFavoritesTab && x.type === 'favorite',
               all: x.type === 'favorite',
               exclusive: true,
               player: false,

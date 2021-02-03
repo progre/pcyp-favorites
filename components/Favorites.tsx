@@ -11,7 +11,7 @@ import {
   TableHead,
   TableRow,
 } from '@material-ui/core';
-import { Warning } from '@material-ui/icons';
+import { Info, Warning } from '@material-ui/icons';
 import React from 'react';
 import Favorite from './Favorite';
 
@@ -78,10 +78,35 @@ export default function Favorites(props: Props): JSX.Element {
       <Table size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>
-            <TableCell align="right">フィルタ名</TableCell>
-            <TableCell>検索文字列</TableCell>
+            <TableCell align="right">
+              <b>フィルタ名</b>
+            </TableCell>
+            <TableCell>
+              <b>検索文字列</b>
+            </TableCell>
             <TableCell align="center">
-              備考{numErrors > 0 ? <small> (警告 {numErrors} 件)</small> : ''}
+              <b>備考</b>
+              {numErrors > 0 ? <small> (警告 {numErrors} 件)</small> : ''}
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
+            <TableCell>
+              <List dense={true}>
+                <ListItem>
+                  <ListItemIcon>
+                    <Info color="primary" />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={
+                      favs.filter((x) => x.fav.type === 'favorite').length <= 10
+                        ? 'お気に入りの数が10件以下なので、それぞれの "お気に入りリストにタブを表示" は ON になります。'
+                        : 'お気に入りの数が10件を超しているので、それぞれの "お気に入りリストにタブを表示" は OFF になります。'
+                    }
+                  />
+                </ListItem>
+              </List>
             </TableCell>
           </TableRow>
         </TableHead>
@@ -91,7 +116,9 @@ export default function Favorites(props: Props): JSX.Element {
               <TableCell component="th" scope="row" align="right">
                 {row.fav.name}
               </TableCell>
-              <TableCell>{row.fav.regExp}</TableCell>
+              <TableCell>
+                <small>{row.fav.regExp}</small>
+              </TableCell>
               <TableCell>
                 <Remarks warnsForPeCaRecorder={row.warnsForPeCaRecorder} />
               </TableCell>
