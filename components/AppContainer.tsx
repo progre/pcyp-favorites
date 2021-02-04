@@ -4,7 +4,6 @@ import { WithSnackbarProps, SnackbarProvider, withSnackbar } from 'notistack';
 import App from './App';
 import Favorite from './Favorite';
 import fromPcypLiteIni from './fromPcypLiteIni';
-import PeCaRecorder from './pecarecorder/PeCaRecorder';
 
 function AppContainerWrapped(props: WithSnackbarProps): JSX.Element {
   const [state, setState] = useState({ favorites: [] as readonly Favorite[] });
@@ -28,7 +27,10 @@ function AppContainerWrapped(props: WithSnackbarProps): JSX.Element {
       }}
       onClickGet={(pcypFavs) => {
         const blob = new Blob([pcypFavs.toFile(state.favorites)], {
-          type: `application/${pcypFavs.fileName.match(/\.(.+?)$/)![1]}`,
+          type:
+            pcypFavs.fileName == null
+              ? undefined
+              : `application/${pcypFavs.fileName.match(/\.(.+?)$/)![1]}`,
         });
         return URL.createObjectURL(blob);
       }}

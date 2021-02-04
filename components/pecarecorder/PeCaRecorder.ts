@@ -3,6 +3,8 @@ import IPcypFavorites from '../IPcypFavorites';
 import toPeCaRecorderXml from './toPeCaRecorderXml';
 
 export default class PeCaRecorder implements IPcypFavorites {
+  readonly name = 'PeCaRecorder';
+  readonly hidden = false;
   readonly fileName = 'Filter.xml';
 
   globalInfos(favs: readonly Favorite[]): readonly string[] {

@@ -3,6 +3,8 @@ import IPcypFavorites from '../IPcypFavorites';
 import toEpcypJson from './toEpcypJson';
 
 export default class Epcyp implements IPcypFavorites {
+  readonly name = 'EPCYP';
+  readonly hidden = true;
   readonly fileName = 'favorites.json';
 
   globalInfos(favs: readonly Favorite[]): readonly string[] {

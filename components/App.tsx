@@ -6,9 +6,10 @@ import React from 'react';
 import styles from './App.module.css';
 import Epcyp from './epcyp/Epcyp';
 import Favorite from './Favorite';
-import Favorites, { hiddenEpcyp } from './Favorites';
+import Favorites from './Favorites';
 import IPcypFavorites from './IPcypFavorites';
 import PeCaRecorder from './pecarecorder/PeCaRecorder';
+import PeerCastStation from './peercaststation/PeerCastStation';
 
 export interface Props {
   favorites: readonly Favorite[];
@@ -17,8 +18,6 @@ export interface Props {
 }
 
 function Header(props: Props): JSX.Element {
-  const epcyp = new Epcyp();
-  const peCaRecorder = new PeCaRecorder();
   return (
     <div className={styles.header}>
       <div className={styles.description}>
@@ -34,40 +33,26 @@ function Header(props: Props): JSX.Element {
         </ol>
       </div>
       <div className={styles.buttons}>
-        {hiddenEpcyp ? null : (
-          <Button
-            disabled={props.favorites.length === 0}
-            variant="contained"
-            size="large"
-            color="primary"
-            startIcon={<GetApp />}
-            href="#"
-            download={epcyp.fileName}
-            onClick={(ev) => {
-              (ev.currentTarget as HTMLAnchorElement).href = props.onClickGet(
-                epcyp
-              );
-            }}
-          >
-            EPCYP 形式へ変換
-          </Button>
+        {[new Epcyp(), new PeerCastStation(), new PeCaRecorder()].map((x) =>
+          x.hidden ? null : (
+            <Button
+              disabled={props.favorites.length === 0}
+              variant="contained"
+              size="large"
+              color="primary"
+              startIcon={<GetApp />}
+              href="#"
+              download={x.fileName}
+              onClick={(ev) => {
+                (ev.currentTarget as HTMLAnchorElement).href = props.onClickGet(
+                  x
+                );
+              }}
+            >
+              {x.name} 形式へ変換
+            </Button>
+          )
         )}
-        <Button
-          disabled={props.favorites.length === 0}
-          variant="contained"
-          size="large"
-          color="primary"
-          startIcon={<GetApp />}
-          href="#"
-          download={peCaRecorder.fileName}
-          onClick={(ev) => {
-            (ev.currentTarget as HTMLAnchorElement).href = props.onClickGet(
-              peCaRecorder
-            );
-          }}
-        >
-          PeCaRecorder 形式へ変換
-        </Button>
       </div>
     </div>
   );
