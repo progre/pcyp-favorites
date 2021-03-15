@@ -57,6 +57,7 @@ export default function fromPcypLiteIni(text: string): Favorite[] | null {
   if (keys[0] !== 'Fav_0') {
     return null;
   }
+  keys.reverse();
   return keys
     .map((x) => favorites[x])
     .map((x) =>
